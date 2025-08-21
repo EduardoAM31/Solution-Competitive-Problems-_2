@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+ 
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbegin,(x).rend
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+ 
+const int mod = (int)1e9+7;
+#define inf LLONG_MAX
+ 
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+#define vvpi vector<vpi>
+int n, l;
+vvi adj;
+int timer;
+vi tin, tout;
+vvi upe;
+void dfs(int v, int p){
+    tin[v] = ++timer;
+    upe[v][0] = p;
+    for (int i = 1; i <= l; ++i)
+       upe[v][i] = upe[upe[v][i-1]][i-1];
+    for (auto u : adj[v]) 
+        if (u != p)
+            dfs(u, v);
+    tout[v] = ++timer;
+}
+bool is_ancestor(int u, int v)
+{return tin[u] <= tin[v] && tout[u] >= tout[v];}
+int lca(int u, int v){
+    if (is_ancestor(u, v))return u;
+    if (is_ancestor(v, u))return v;
+    for (int i = l; i >= 0; --i) 
+        if (!is_ancestor(upe[u][i], v))
+            u = upe[u][i];
+    return upe[u][0];
+}
+void preprocess(int root) {
+    tin.resize(n);
+    tout.resize(n);
+    timer = 0;
+    l = ceil(log2(n));
+    upe.assign(n, vi(l + 1));
+	dfs(root,root);
+}
+signed main(){
+	ios;
+    int qq;
+    cin>>n>>qq;
+    adj = vvi(n);
+    for(int i=1;i<n;i++){
+        int m;
+        cin>>m;
+        adj[m-1].pb(i);
+    }   
+	preprocess(0);
+    while(qq--){
+        int x,y;
+        cin>>x>>y;
+        x--,y--;
+        cout<<lca(x,y)+1<<endl;
+    }
+}

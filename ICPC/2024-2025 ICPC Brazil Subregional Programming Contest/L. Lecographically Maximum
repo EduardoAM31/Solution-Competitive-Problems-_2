@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define sz(x) (int)(x.size())
+
+const int mod = (int)1e9+7;
+#define inf ULLONG_MAX
+
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+signed main()
+{
+    ios;
+	int n;
+    cin>>n;
+    vi v(32,0);
+    for(int i=0;i<n;i++){
+        int x;cin>>x;
+        bitset<32> bb(x);
+        for(int k=0,j=31;j>=0;j--,k++){
+            if(bb[j])
+                v[k]++;
+        }
+    }
+    for(int i=0;i<n;i++){
+        int sum=0;
+        for(int k=31,j=0;j<32;j++,k--){
+            if(v[j]){
+                sum+=(1<<k);
+                v[j]--;
+            }
+        }
+        cout<<sum<<" ";
+    }   
+}
+ 

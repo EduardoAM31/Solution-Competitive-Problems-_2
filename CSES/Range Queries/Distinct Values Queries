@@ -1,0 +1,97 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define sz(x) (int)(x.size())
+#define all(x) (x).begin(),(x).end()
+#define allr(x) (x).rbegin(),(x).rend()
+#define endl '\n'
+#define V vector
+#define pii pair<int,int>
+#define mem(x, v) memset((x), v, sizeof (x))
+#define mid (l+r)/2
+const int mod = (int)1e9+7;
+const int inf = (int)LLONG_MAX;
+
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+V<V<int>> seg;
+V<int> v, ocor;
+int n;
+map<int,int> idx;
+void build(int p = 1, int l = 0, int r = n-1){
+    if(l == r){
+        seg[p].emplace_back(ocor[l]);
+        return;
+    }
+    build(2*p+1, mid+1, r);
+    build(2*p, l, mid);
+    merge(all(seg[2*p]), all(seg[2*p+1]), back_inserter(seg[p]));
+}
+int query(int ql, int qr, int p = 1, int l = 0, int r = n-1){
+    if(r < ql || l > qr)return 0;
+    if(l >= ql && r <= qr){
+        //cout<<seg[p];
+        return sz(seg[p]) - (lower_bound(all(seg[p]), qr+1) - seg[p].begin());
+        return 0;
+    }
+    return query(ql, qr, 2*p+1, mid+1, r) + query(ql, qr, 2*p, l, mid);
+}
+void solve(){
+    int qq;
+    cin >> n >> qq;
+    v.resize(n);
+    seg.resize(n*4);
+    ocor.resize(n);
+    cin >> v;
+    for(int i = n-1;i >= 0;i--){
+        ocor[i] = (idx[v[i]] == 0 ? n : idx[v[i]]);
+        idx[v[i]] = i;
+    }
+    build();
+    while(qq--){
+        int l, r;
+        cin >> l >> r;
+        --l, --r;
+        cout<<query(l, r)<<endl;
+    }
+}
+signed main() {
+    ios;
+    int tt=1;
+    //cin>>tt;
+    while(tt--){
+        solve();
+    }
+    return 0;
+}

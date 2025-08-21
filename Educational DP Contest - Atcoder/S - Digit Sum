@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define sz(x) (int)(x.size())
+#define all(x) (x).begin(),(x).end()
+#define allr(x) (x).rbegin(),(x).rend()
+#define endl '\n'
+#define V vector
+#define pii pair<int,int>
+#define mem(x, v) memset((x), v, sizeof (x))
+const int mod = (int)1e9+7;
+const int llinf = (int)LLONG_MAX;
+const int inf = (int)INT_MAX;
+
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+int dp[10005][2][110];
+int k;
+int memo(int n, int tr,int sum, string& dig){
+    if(n == -1)return (sum % k == 0 ? 1 : 0);
+    if(dp[n][tr][sum] != -1)return dp[n][tr][sum];
+    int up = (tr ? dig[n] - '0' : 9);
+    int ans = 0;
+    for(int i = 0;i <= up;i++){
+        (ans += memo(n - 1, tr & (i == up), (sum + i) % k, dig)) %= mod;
+    }
+    return dp[n][tr][sum] = ans;
+}
+void solve(){
+    string n;
+    cin>>n>>k;
+    mem(dp, -1);
+    reverse(all(n));
+    cout<<(memo(sz(n)-1, 1, 0, n)-1 + mod) % mod<<endl;
+}
+signed main() {
+    ios;
+    int tt=1;
+    //cin>>tt;
+    while(tt--){
+        solve();
+    }
+    return 0;
+}

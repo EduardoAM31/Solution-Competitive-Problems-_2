@@ -1,0 +1,96 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+#define rever(x) string(alld(x))
+ 
+int mod = (int)1e9+7;
+#define inf LLONG_MAX
+#define endl '\n'
+
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+//broken input = i, ceil = j -> fmod(i, j) == i%j
+//auto func = [&]() -> vi{};
+int fmod(const int i, const int j){
+	return i < j ? i : i % j;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) 
+        os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) 
+        is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) 
+            os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) 
+            is >> j;            
+    return is;
+}
+
+signed main(){
+	ios;
+    int n,m,k,q=1;
+    cin>>n>>m>>k;
+    while(n&&m&&k){
+        vvi v(n, vi(n,inf));
+        for(int i=0;i<m;i++){
+            int a,b,c;
+            cin>>a>>b>>c;
+            v[a-1][b-1]=c;
+            v[b-1][a-1]=c;
+        }
+        for(int k=0;k<n;k++)
+            for(int i=0;i<n;i++)
+                for(int j=0;j<n;j++)
+                    v[i][j] = min(v[i][j], max(v[i][k], v[k][j]));
+        cout<<"Case #"<<q++<<endl;
+        while(k--){
+            int b,c;
+            cin>>b>>c;
+            int res=v[b-1][c-1];
+            if(res == inf)cout<<"no path\n";
+            else cout<<res<<endl;
+        }
+        cin>>n>>m>>k;
+        if(n&&m&&k)cout<<endl;
+    }
+}

@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define inf LLONG_MAX
+int n;
+int dp[5001][5001][2];
+vector<int> vet;
+int pd(int i,int j,int lc)
+{
+    if(i>j)return 0;
+    if(dp[i][j][lc]!=-1)return dp[i][j][lc];
+    if(!lc){
+        return dp[i][j][lc]=max(pd(i+1,j,1)+vet[i],pd(i,j-1,1)+vet[j]);
+    }else{
+        return dp[i][j][lc]=min(pd(i+1,j,0),pd(i,j-1,0));
+    }
+}
+signed main()
+{
+    cin>>n;
+    memset(dp,-1,sizeof dp);
+    vet = vector<int>(n+1);
+    for(int i=0;i<n;i++)
+        cin>>vet[i];
+    cout<<pd(0,n-1,0)<<endl;
+}

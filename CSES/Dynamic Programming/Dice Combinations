@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+int n,mod=1e9+7;
+vector<int> moeda;
+int pd(int valor)
+{
+    if(valor==0)return 1;
+    if(moeda[valor]!=0)return moeda[valor];
+    for(int i = 1;i <= 6;i++){
+        if(valor-i>=0)
+            moeda[valor]+=pd(valor-i)%mod;
+    }
+    return moeda[valor]%mod;
+}
+signed main()
+{
+    cin>>n;
+    moeda = vector<int>(n+1,0);
+    cout<<pd(n)<<endl;
+}

@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define endl '\n'
+#define V vector
+ 
+const int mod = (int)1e9+7;
+const int llinf = (int)LLONG_MAX;
+const int inf = (int)INT_MAX;
+ 
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec){
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+void solve(){
+    int n,m;
+    cin>>n>>m;
+    V<int> v(n);
+    cin>>v;
+    V<V<int>> dp(n, V<int>(m+1, 0));
+    if(v[0] == 0){
+        for(int i=0;i<=m;i++){
+            dp[0][i] = 1;
+        }
+    }else{
+        dp[0][v[0]] = 1;
+    }
+    for(int i=1;i<n;i++){
+        if(v[i] == 0){
+            for(int j=1;j<=m;j++){
+                for(auto k : {j-1, j, j+1}){
+                    if(k >= 1 && k <= m)
+                        (dp[i][j] += dp[i-1][k]) %= mod;
+                }
+            }
+        }else{
+            for(auto k : {v[i]-1, v[i], v[i]+1}){
+                if(k >= 1 && k <= m)
+                    (dp[i][v[i]] += dp[i-1][k]) %= mod;
+            }
+        }
+    }
+    int sum=0;
+    for(int j=1;j<=m;j++)(sum += dp[n-1][j])%=mod;
+    cout<<sum<<endl;
+}
+signed main() {
+    ios;
+    int tt=1;
+    //cin>>tt;
+    while(tt--){
+        solve();
+    }
+}

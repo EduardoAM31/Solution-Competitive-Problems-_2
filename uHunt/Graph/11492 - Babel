@@ -1,0 +1,113 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+#define rever(x) string(alld(x))
+ 
+int mod = (int)1e9+7;
+#define inf LLONG_MAX
+#define endl '\n'
+
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+#define vvpi vector<vpi>
+int fmod(const int i, const int j){return i < j ? i : i % j;}
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+signed main(){
+	ios;
+    int n;
+    cin>>n;
+    cin.ignore();
+    while(n){
+        string a,b;
+        cin>>a>>b;
+        int aux=1;
+        map<string,int> pala;
+        if(!pala[a])pala[a]=aux++;
+        if(!pala[b])pala[b]=aux++;
+        vector<vector<pair<int,string>>> adj(5000);
+        vvi dist(4000, vi(26, inf));
+        for(int i=0;i<n;i++){
+            string x,y,z;
+            cin>>x>>y>>z;
+            if(!pala[x])pala[x]=aux++;
+            if(!pala[y])pala[y]=aux++;
+            adj[pala[x]].pb({pala[y],z});
+            adj[pala[y]].pb({pala[x],z});
+        }
+        set<pair<int,pair<int,char>>> se;
+        for(int i=0;i<26;i++)
+            dist[1][i]=0;
+        se.insert({0, {1, 'a'}});
+        while(!se.empty()){
+            int p = se.bg->f;
+            int u = se.bg->s.f;
+            char c = se.bg->s.s;
+            se.erase(se.bg);
+            for(auto i : adj[u]){
+                int v = i.f;
+                string w = i.s;
+                if(u != 1 && c == w[0])continue;
+                int pos_u = (int)(c-97);
+                int pos_v = (int)(w[0]-97);
+                if(dist[u][pos_u] + sz(w) < dist[v][pos_v]){
+                    dist[v][pos_v] = dist[u][pos_u] + sz(w);
+                    se.insert({dist[v][pos_v], {v, w[0]}});
+                }
+            }
+        }
+        if(*min_element(all(dist[2])) == inf)cout<<"impossivel\n";
+        else cout<<*min_element(all(dist[2]))<<endl;
+        cin>>n;
+    }
+}   
+
+
+
+ 
+

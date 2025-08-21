@@ -1,0 +1,97 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+#define rever(x) string(alld(x))
+ 
+int mod = (int)1e9+7;
+#define inf LLONG_MAX
+#define endl '\n'
+
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+#define vvpi vector<vpi>
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+vvi adj;
+int cont=0;
+vector<bool> vis;
+void dfs(int i){
+    cont++;
+    vis[i] = 1;
+    for(auto j : adj[i]){
+        if(vis[j])continue;
+        dfs(j);
+    }
+}   
+signed main(){
+	ios;
+    int tt;
+    cin>>tt;
+    while(tt--){
+        int n,m,qq;
+        cin>>n>>m>>qq;
+        adj = vvi(n+1);
+        for(int i=0;i<m;i++){
+            int x,y;
+            cin>>x>>y;
+            adj[x].pb(y);
+        }
+        cont=0;
+        vis = vector<bool> (n+1, 0);
+        while(qq--){
+            int x;
+            cin>>x;
+            if(!vis[x])dfs(x);
+        }
+        cout<<cont<<endl;    
+    }
+}
+
+
+
+ 

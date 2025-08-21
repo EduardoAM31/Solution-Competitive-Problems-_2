@@ -1,0 +1,137 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+#define rever(x) string(alld(x))
+ 
+int mod = (int)1e9+7;
+#define inf LLONG_MAX
+#define endl '\n'
+
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+#define vvpi vector<vpi>
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+#define vc vector<char>
+#define vvc vector<vc>
+vvc adj;
+int vx[4]={1,-1,0,0};
+int vy[4]={0,0,1,-1};
+void floc(int i,int j){
+    if(i<0||i==9||j<0||j==9||(adj[i][j]!='b'&&adj[i][j]!='p'&&adj[i][j]!='.'))return;
+    adj[i][j]='c';
+    for(int k=0;k<4;k++)
+        floc(i+vx[k],j+vy[k]);
+}
+void flop(int i,int j,int x,int y){
+    if(i<0||i==9||j<0||j==9||adj[i][j]=='c')return;
+    if(adj[i][j] == 'O' || adj[i][j] == 'B'){
+        floc(x,y);
+        return;
+    }else if(adj[i][j]=='.')adj[i][j] = 'p';
+    else return;
+    for(int k=0;k<4;k++)
+        flop(i+vx[k],j+vy[k],i,j);
+}
+void flob(int i,int j,int x,int y){
+    if(i<0||i==9||j<0||j==9||adj[i][j]=='c')return;
+    if(adj[i][j] == 'X' || adj[i][j] == 'P'){
+        floc(x,y);
+        return;
+    }else if(adj[i][j]=='.')adj[i][j] = 'b';
+    else return;
+    for(int k=0;k<4;k++)
+        flob(i+vx[k],j+vy[k],i,j);
+}
+void floP(int i,int j){
+    if(i<0||i==9||j<0||j==9||(adj[i][j]!='X' && adj[i][j]!='.'))return;
+    if(adj[i][j]=='.')flop(i,j,i,j);
+    else adj[i][j]='P';
+    for(int k=0;k<4;k++)
+        floP(i+vx[k],j+vy[k]);
+}
+void floB(int i,int j){
+    if(i<0||i==9||j<0||j==9||(adj[i][j]!='O' && adj[i][j]!='.'))return;
+    if(adj[i][j]=='.')flob(i,j,i,j);
+    else adj[i][j]='B';
+    for(int k=0;k<4;k++)
+        floB(i+vx[k],j+vy[k]);
+}
+signed main(){
+	ios;
+    int tt;
+    cin>>tt;
+    while(tt--){
+        adj = vvc(9, vc(9));
+        cin>>adj;
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if(adj[i][j] == 'X'){
+                    floP(i,j);
+                }else if(adj[i][j] == 'O'){
+                    floB(i,j);
+                }
+            }
+        }
+        int p=0,b=0;
+        for(int i=0;i<9;i++){
+            for(int j=0;j<9;j++){
+                if(adj[i][j] == 'P' || adj[i][j] == 'p'){
+                    p++;
+                }else if(adj[i][j] == 'B'  || adj[i][j] == 'b'){
+                    b++;
+                }
+            }
+        }
+        cout<<"Black "<<p<<" White "<<b<<endl;
+    }
+}
+
+
+
+ 

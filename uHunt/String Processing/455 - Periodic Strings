@@ -1,0 +1,117 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+ 
+int mod = (int)1e9+7;
+#define inf LLONG_MAX
+#define endl '\n'
+
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+//broken input = i, ceil = j -> fmod(i, j) == i%j
+//auto func = [&]() -> vi{};
+int fmod(const int i, const int j){
+	return i < j ? i : i % j;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) 
+        os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) 
+        is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) 
+            os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) 
+            is >> j;            
+    return is;
+}
+vector<int> prefix_function(string const& S) {
+  int N = sz(S);
+  vector<int> pi(N, 0);
+  for (int i = 1; i < N; i++) {
+    int j = pi[i-1];
+    while (j > 0 && S[i] != S[j]) j = pi[j-1];
+    if (S[i] == S[j]) j++;
+    pi[i] = j;
+  }
+  return pi;
+}
+vector<int> find_string(string const& T, string const& S) {
+    vector<int> have;
+    int N = sz(S), M = sz(T);
+    auto P = prefix_function(T+"#"+S);
+    for (int i = M+1; i <= N+M; i++) {
+        if (P[i] == M) {
+            if(have.empty())have.emplace_back(i-2*M);
+            else if(have[sz(have)-1] + sz(T) == i-2*M)have.emplace_back(i-2*M);
+        }
+    }
+    return have;
+}
+signed main(){
+	ios;
+    int n;
+    cin>>n;
+    while(n--){
+        vi div;
+        div.pb(1);
+        string a;
+        cin>>a;
+        int t = sz(a);
+        for(int i=2;i<=t/2;i++){
+            if(t%i==0)div.pb(i);
+        }
+        int r = -1;
+        int td = sz(div);
+        for(int i=0;i<td;i++){
+            string aux = a.substr(0,div[i]);
+            vi v = find_string(aux, a);
+            //cout<<v;
+            if(sz(v) * sz(aux) == sz(a)){
+                r=sz(aux);
+                break;
+            }
+        }
+        cout<<(r == -1 ? sz(a) : r)<<endl;
+        if(n)cout<<endl;
+    }
+}

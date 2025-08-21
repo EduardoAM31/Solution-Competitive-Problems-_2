@@ -1,0 +1,119 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define sz(x) (int)(x.size())
+#define all(x) (x).begin(),(x).end()
+#define allr(x) (x).rbegin(),(x).rend()
+#define endl '\n'
+#define V vector
+#define pii pair<int,int>
+#define mem(x, v) memset((x), v, sizeof (x))
+#define mid (l+r)/2
+const int mod = 998244353;
+const int inf = (int)LLONG_MAX;
+ 
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+V<int> lazy_sum, lazy_set, seg, v;
+int n;
+void prop(int p, int l, int r){
+    if(lazy_set[p]){
+        seg[p] = lazy_set[p] * (r - l + 1);
+        if(l != r){
+            lazy_set[p*2] = lazy_set[p];
+            lazy_set[p*2+1] = lazy_set[p];
+            lazy_sum[p*2] = 0;
+            lazy_sum[p*2+1] = 0;
+        }
+        lazy_set[p] = 0;
+    }
+    if(lazy_sum[p]){
+        seg[p] += lazy_sum[p] * (r - l + 1);
+        if(l != r){
+            lazy_sum[p*2] += lazy_sum[p];
+            lazy_sum[p*2+1] += lazy_sum[p];
+        }
+        lazy_sum[p] = 0;
+    }
+}
+int build(int p = 1, int l = 0, int r = n-1){
+    if(l == r)return seg[p] = v[l];
+    return seg[p] = build(p*2+1, mid+1, r) + build(p*2, l, mid);
+}
+int update(int ql, int qr, int x, int op, int p = 1, int l = 0, int r = n-1){
+    prop(p, l, r);
+    if(l > qr || r < ql)return seg[p];
+    if(l >= ql && r <= qr){
+        if(op == 1)lazy_sum[p] += x;
+        else lazy_set[p] = x;
+        prop(p, l, r);
+        return seg[p];
+    }
+    return seg[p] = update(ql, qr, x, op, p*2+1, mid+1, r) + update(ql, qr, x, op, p*2, l, mid);
+}
+int query(int ql, int qr, int p = 1, int l = 0, int r = n-1){
+    prop(p, l, r);
+    if(r < ql || l > qr)return 0;
+    if(l >= ql && r <= qr)return seg[p];
+    return query(ql, qr, p*2+1, mid+1, r) + query(ql, qr, p*2, l, mid);
+}
+void solve(){
+    int qq;
+    cin >> n >> qq;
+    v.resize(n);
+    lazy_set.resize(n*4);
+    lazy_sum.resize(n*4);
+    seg.resize(n*4);
+    cin >> v;
+    build();
+    while(qq--){
+        int op, l, r;
+        cin >> op >> l >> r;
+        --l, --r;
+        if(op != 3){
+            int x;cin >> x;
+            update(l, r, x, op);
+        }else cout<<query(l, r)<<endl;
+        //cout<<seg<<lazy_sum;
+    }
+}
+signed main() {
+    ios;
+    int tt=1;
+    //cin>>tt;
+    while(tt--){
+        solve();
+    }
+    return 0;
+}

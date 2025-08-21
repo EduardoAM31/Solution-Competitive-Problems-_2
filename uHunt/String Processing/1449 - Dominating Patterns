@@ -1,0 +1,119 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp>
+#include <functional> // for less
+using namespace __gnu_pbds;
+using namespace std;
+ 
+#define int long long
+// a new data structure defined. Please refer below
+// GNU link : https://goo.gl/WVDL6g
+typedef tree<pair<int, int>, null_type,
+             less<pair<int, int> >, rb_tree_tag,
+             tree_order_statistics_node_update>
+    ordered_multiset;
+
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+#define rever(x) string(alld(x))
+ 
+int mod = (int)1e9+7;
+#define inf LLONG_MAX
+#define endl '\n'
+
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+#define vvpi vector<vpi>
+int fmod(const int i, const int j){return i < j ? i : i % j;}
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+vector<int> prefix_function(string const& S) {
+  int N = sz(S);
+  vector<int> pi(N, 0);
+  for (int i = 1; i < N; i++) {
+    int j = pi[i-1];
+    while (j > 0 && S[i] != S[j]) j = pi[j-1];
+    if (S[i] == S[j]) j++;
+    pi[i] = j;
+  }
+  return pi;
+}
+vector<int> find_string(string const& S, string const& T) {
+  vector<int> have;
+  int N = sz(S), M = sz(T);
+  auto P = prefix_function(T+"#"+S);
+  for (int i = M+1; i <= N+M; i++) {
+    if (P[i] == M) have.emplace_back(i-2*M);
+  }
+  return have;
+}
+bool ok(pair<int,pair<int,string>> a,pair<int,pair<int,string>> b){
+    if(a.f != b.f)return a.f > b.f;
+    return a.s.f < b.s.f;
+}
+signed main(){
+	ios;
+    int n;
+    cin>>n;
+    while(n){
+        cin.ignore();
+        vector<string> vs(n);
+        cin>>vs;
+        string pala;
+        cin>>pala;
+        vector<pair<int,pair<int,string>>> aux;
+        for(int i=0;i<n;i++){
+            aux.pb({sz(find_string(pala,vs[i])),{i,vs[i]}});
+        }
+        sort(all(aux), ok);
+        int maior = aux[0].f;
+        cout<<maior<<endl;
+        for(int i=0;i<n && aux[i].f == maior;i++){
+            cout<<aux[i].s.s<<endl;
+        }
+        cin>>n;
+    }
+}   

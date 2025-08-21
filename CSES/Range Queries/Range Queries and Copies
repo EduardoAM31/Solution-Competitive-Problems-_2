@@ -1,0 +1,110 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define sz(x) (int)(x.size())
+#define all(x) (x).begin(),(x).end()
+#define allr(x) (x).rbegin(),(x).rend()
+#define endl '\n'
+#define V vector
+#define pii pair<int,int>
+#define mem(x, v) memset((x), v, sizeof (x))
+#define mid (l+r)/2
+const int mod = (int)1e9+7;
+const int inf = (int)LLONG_MAX;
+
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+struct No{
+    int sum = 0;
+    No *lc, *rc;
+
+    No(int v) : sum(v), lc(nullptr), rc(nullptr) {}
+    No(No *l, No *r){
+        sum = 0;
+        lc = l;
+        rc = r;
+        if(l) sum += l->sum;
+        if(r) sum += r->sum;    
+    }
+    No(No *raiz) : sum(raiz->sum), lc(raiz->lc), rc(raiz->rc) {}
+};
+int n;
+int v[200005];
+No *raiz[200005];
+No *build(int l = 0, int r = n-1){
+    if(l == r)return new No(v[l]);
+    return new No(build(l, mid), build(mid+1, r));
+}
+No *update(No *atual, int ql, int x, int l = 0, int r = n-1){
+    if(l == r)return new No(x);
+    if(ql > mid)return new No(atual->lc, update(atual->rc, ql, x, mid+1, r));
+    else return new No(update(atual->lc, ql, x, l, mid), atual->rc);
+}
+int query(No *atual, int ql, int qr, int l = 0, int r = n-1){
+    if(r < ql || l > qr)return 0;
+    if(l >= ql && r <= qr)return atual->sum;
+    return query(atual->lc, ql, qr, l, mid) + query(atual->rc, ql, qr, mid+1, r);
+}
+void solve(){
+    int qq;
+    cin >> n >> qq;
+    for(int i = 0;i < n;i++) 
+        cin>>v[i];
+    int copy = 0;
+    raiz[copy++] = build();
+    while(qq--){
+        int op, k;
+        cin >> op >> k;
+        if(op == 1){
+            int l, x;
+            cin >> l >> x;
+            raiz[k-1] = update(raiz[k-1], l-1, x);
+        }else if(op == 2){
+            int l, r;
+            cin >> l >> r;
+            cout<<query(raiz[k-1], l-1, r-1)<<endl;
+        }else{
+            raiz[copy++] = new No(raiz[k-1]);
+        }
+    }
+}
+signed main() {
+    ios;
+    int tt=1;
+    //cin>>tt;
+    while(tt--){
+        solve();
+    }
+    return 0;
+}

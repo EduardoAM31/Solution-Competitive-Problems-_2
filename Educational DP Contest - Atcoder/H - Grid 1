@@ -1,0 +1,102 @@
+#if defined(LOCAL) or not defined(LUOGU)
+#pragma GCC optimize(3)
+#pragma GCC optimize("Ofast,unroll-loops")
+#endif
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp> // Common file
+#include <ext/pb_ds/tree_policy.hpp>
+#include <functional> // for less
+using namespace __gnu_pbds;
+using namespace std;
+ 
+// a new data structure defined. Please refer below
+// GNU link : https://goo.gl/WVDL6g
+typedef tree<pair<int, int>, null_type,
+             less<pair<int, int> >, rb_tree_tag,
+             tree_order_statistics_node_update>
+    ordered_multiset;
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define ll long long
+#define f first
+#define s second
+#define pb push_back
+#define pf push_front
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+#define rever(x) string(alld(x))
+ 
+int mod = (int)1e9+7;
+#define llinf LLONG_MAX
+#define inf INT_MAX
+#define endl '\n'
+
+#define V vector
+
+int fmod(const int i, const int j){return i < j ? i : i % j;}
+
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+V<V<char>> mat;
+V<V<ll>> dp;
+int n,m;
+int memo(int i,int j){
+    if(mat[i][j] == '#')return 0;
+    if(i == n-1 && j == m-1)return 1;
+    if(dp[i][j] != -1)return dp[i][j];
+    return dp[i][j] = ((i+1 < n ? memo(i+1, j)%mod : 0) + (j+1 < m ? memo(i, j+1)%mod : 0))%mod;
+}
+void solve(){
+    cin>>n>>m;
+    mat = V<V<char>>(n, V<char>(m));
+    dp = V<V<ll>>(n, V<ll>(m, -1));
+    cin>>mat;
+    cout<<memo(0,0)<<endl;
+}
+signed main() {
+    ios;
+    int tt=1;
+    //cin>>tt;
+    while(tt--){
+        solve();
+    }
+}
+
+
+ 

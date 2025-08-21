@@ -1,0 +1,98 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define sz(x) (int)(x.size())
+#define all(x) (x).begin(),(x).end()
+#define allr(x) (x).rbegin(),(x).rend()
+#define endl '\n'
+#define V vector
+#define pii pair<int,int>
+#define mem(x, v) memset((x), v, sizeof (x))
+const int mod = (int)1e9+7;
+const int inf = (int)LLONG_MAX;
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+int n;
+V<int> v, seg;
+int find(int x){
+    int l = 0, r = n-1, p = 1, tmp = x;
+    while(l < r){
+        int mid = (r + l) / 2;
+        if(x > seg[p * 2]){
+            p = p * 2 + 1;
+            l = mid + 1;
+        }else{
+            p *= 2;
+            r = mid;
+        }
+    }
+    return (seg[p] < tmp ? -1 : l);
+}
+int build(int p = 1,int l = 0,int r = n-1){
+    if(l == r)return seg[p] = v[l];
+    int mid = (r + l) / 2;
+    return seg[p] = max(build(p*2+1, mid+1, r), build(p*2, l, mid));
+}   
+int update(int i, int x, int p = 1,int l = 0,int r = n-1){
+    if(i < l || i > r)return seg[p];
+    if(l == r)return seg[p] -= x;
+    int mid = (r + l) / 2;
+    return seg[p] = max(update(i, x, p*2+1, mid+1, r), update(i, x, p*2, l, mid));
+}
+void solve(){
+    int qq;
+    cin >> n >> qq;
+    v = V<int>(n);
+    seg = V<int>(n * 4, 0);
+    cin >> v;
+    build();
+    for(int i=0;i<qq;i++){
+        int x;
+        cin >> x;
+        int idx = find(x);
+        cout<<idx + 1<<" ";
+        if(idx >= 0)
+            update(idx, x);
+    }
+    cout<<endl;
+}
+signed main() {
+    ios;
+    int tt=1;
+    //cin>>tt;
+    while(tt--){
+        solve();
+    }
+    return 0;
+}

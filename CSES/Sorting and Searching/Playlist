@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+ 
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbegin,(x).rend
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+ 
+const int mod = (int)1e9+7;
+#define inf LLONG_MAX
+ 
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+#define vvpi vector<vpi>
+int fmod(const int i, const int j){return i < j ? i : i % j;}
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+signed main(){
+    ios;
+    int n;
+    cin>>n;
+    vi v(n);
+    cin>>v;
+    int maior=0;
+    map<int,int> mp;
+    int l=0;
+    for(int i=0;i<n;i++){
+        if(mp.count(v[i]) && l <= mp[v[i]]){
+            maior = max(maior, i-l);
+            l = mp[v[i]]+1;
+            mp[v[i]] = i;
+        }else mp[v[i]] = i;
+    }
+    maior = max(maior, n-l);
+    cout<<maior<<endl;
+}

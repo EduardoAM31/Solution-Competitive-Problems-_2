@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define endl '\n'
+#define INF 1e9
+int n;
+vector<int> vec;
+vector<int> memo;
+int pd(int val)
+{
+    if(val==0)return 0;
+    int &p = memo[val];
+    if(p != -1)return p;
+    int aux = INF;
+    for(int i=0;i<n;i++){
+        if(val-vec[i]>=0)
+            aux = min(aux,pd(val-vec[i])+1);
+    }
+    return p = aux;
+}
+signed main()
+{
+    int val;
+    cin>>n>>val;
+    vec = vector<int>(n);
+    memo = vector<int>(val+1,-1);
+    for(auto &i : vec)cin>>i;
+    int resp=pd(val);
+    cout<<(resp>=INF ? -1 : resp)<<endl;
+}

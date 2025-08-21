@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+//#include <chatgpt>
+#define int long long
+#define pii pair<int,int>
+#define inf ULLONG_MAX
+#define vi vector<int>
+#define vvi vector<vi>
+const int mod = 1e9+7;
+#define f first
+#define s second
+using namespace std;
+signed main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int qq=1;
+    //cin>>qq;
+    while(qq--){
+		int n;
+		cin>>n;
+		int vet[n];
+		for(auto &i : vet)cin>>i;
+		int resp=0;
+		map<int,int> mp;
+		if(vet[0]==1)resp++;
+		mp[vet[0]]++;
+		for(int i=1;i<n;i++){
+			vet[i]+=vet[i-1];
+			if(vet[i]%2)resp++;
+			if(vet[i]%2){
+				resp+=mp[0];
+			}else{
+				resp+=mp[1];
+			}
+			mp[vet[i]%2]++;
+		}
+		//for(auto i : mp)cout<<i.f<<" "<<i.s<<"\n";
+		//for(auto i : vet)cout<<i<<" ";
+		//	cout<<endl;
+		cout<<resp<<endl;
+    }
+}

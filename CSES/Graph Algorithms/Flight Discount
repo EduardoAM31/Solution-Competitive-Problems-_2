@@ -1,0 +1,102 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+#define rever(x) string(alld(x))
+ 
+int mod = (int)1e9+7;
+#define inf LLONG_MAX
+#define endl '\n'
+ 
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+#define vvpi vector<vpi>
+int fmod(const int i, const int j){return i < j ? i : i % j;}
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+signed main(){
+	ios;
+    int n,m;
+    cin>>n>>m;
+    vvpi adj(n+1);
+    vvi dist(n+1, vi(2, inf));
+    for(int i=0;i<m;i++){
+        int x,y,z;
+        cin>>x>>y>>z;
+        adj[x].pb({y,z});
+    }
+    dist[1][0]=0;  
+    set<pair<int,pii>> s;
+    s.insert({0,{1, 0}});
+    while(!s.empty()){
+        int p = s.bg->f;
+        int u = s.bg->s.f;
+        int t = s.bg->s.s;
+        s.erase(s.bg);
+        if((t == 0 && p > dist[u][0]) || (t == 1 && p > dist[u][1]))continue;
+        for(auto i : adj[u]){
+            int v = i.f;
+            int w = i.s;
+            if(t == 1){
+                if(dist[u][1] + w < dist[v][1]){
+                    dist[v][1] = dist[u][1] + w;
+                    s.insert({dist[v][1],{v, 1}});
+                }
+            }else{
+                if(dist[u][0] + w/2 < dist[v][1]){
+                    dist[v][1] = dist[u][0] + w/2;
+                    s.insert({dist[v][1],{v, 1}});
+                }
+                if(dist[u][0] + w < dist[v][0]){
+                    dist[v][0] = dist[u][0] + w;
+                    s.insert({dist[v][0],{v, 0}});
+                }
+            }
+        }
+    }
+    cout<<min(dist[n][0], dist[n][1])<<endl;
+} 

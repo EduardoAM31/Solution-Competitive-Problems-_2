@@ -1,0 +1,92 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define sz(x) (int)(x.size())
+#define all(x) (x).begin(),(x).end()
+#define allr(x) (x).rbegin(),(x).rend()
+#define endl '\n'
+#define V vector
+#define pii pair<int,int>
+#define mem(x, v) memset((x), v, sizeof (x))
+const int mod = (int)1e9+7;
+const int llinf = (int)LLONG_MAX;
+const int inf = (int)INT_MAX;
+
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+int dp[20][10][2][2];
+int memo(int n, int dig, int tight, bool zero, V<int>& digito){
+    if(n == -1) 
+        return 1;
+    if(dig!=-1 && dp[n][dig][zero][tight] != -1)return dp[n][dig][zero][tight];
+    int ans = 0;
+    int up = (tight ? digito[n] : 9);
+    for(int i = 0;i <= up;i++){
+        if(i && i == dig)continue;
+        if(!i && i == dig && !zero)continue;
+        ans += memo(n-1, i, tight & (i == up), (zero & i == 0), digito);
+    }
+    return dp[n][dig][zero][tight] = ans;
+}
+void solve(){
+    int l, r;
+    cin>>l>>r;
+    l--;
+    V<int> digl, digr;
+    while(r){
+        digr.emplace_back(r%10);
+        r/=10;
+    }
+    //reverse(all(digr));
+    mem(dp, -1);
+    int resr = memo(sz(digr)-1, -1, 1, 1, digr);
+    while(l){
+        digl.emplace_back(l%10);
+        l/=10;
+    }
+    //reverse(all(digl));
+    mem(dp, -1);
+    int resl = memo(sz(digl)-1, -1, 1, 1, digl);
+    cout<<resr-resl<<endl;
+    
+}
+signed main() {
+    ios;
+    int tt=1;
+    //cin>>tt;
+    while(tt--){
+        solve();
+    }
+    return 0;
+}

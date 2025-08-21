@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define V vector
+#define pii pair<int,int>
+#define inf INT_MAX
+int dp[1001][1001], n, t_trav;
+V<pii> brinquedo;
+V<V<int>> adj;
+int memo(int u, int t_atual){
+    if(t_atual < 0)return inf;
+    if(t_atual == 0 && u != 0)return inf;
+    if(t_atual == 0 && u == 0)return 0;
+    if(dp[u][t_atual] != -1)return dp[u][t_atual];
+    
+    int ans = memo(u, t_atual - brinquedo[u].first) + brinquedo[u].second;
+    for(auto& v : adj[u]){
+        ans = min(ans, memo(v, t_atual - (t_trav + brinquedo[v].first))+brinquedo[v].second);
+    }
+    return dp[u][t_atual] = ans;
+}
+signed main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    memset(dp, -1, sizeof dp);
+    int t_tot;
+    cin>>t_tot;
+    int m;
+    cin>>n>>m>>t_trav;
+    brinquedo = V<pii>(n);
+    adj = V<V<int>>(n);
+    for(int i=0;i<m;i++){
+        int u, v;
+        cin>>u>>v;  
+        --u,--v;
+        adj[u].emplace_back(v);
+        adj[v].emplace_back(u);
+    }   
+    for(int i=0;i<n;i++){
+        cin>>brinquedo[i].first>>brinquedo[i].second;
+    }
+    int tmp = memo(0, t_tot - brinquedo[0].first) + brinquedo[0].second;
+    if(tmp >= inf){
+        cout<<"It is a trap."<<endl;
+        return 0;
+    }
+    cout<<tmp<<endl;
+}

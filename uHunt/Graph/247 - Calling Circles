@@ -1,0 +1,129 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+ 
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbegin,(x).rend
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+ 
+const int mod = (int)1e9+7;
+#define inf LLONG_MAX
+ 
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+#define vvpi vector<vpi>
+int fmod(const int i, const int j){return i < j ? i : i % j;}
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+vvi adj;
+vvi transpose_graph;
+vector<bool> vis;
+vi node_order;
+vector<string> imp;
+map<string,int> mpsi;
+map<int,string> mpis;
+void dfs(int i){
+    if(vis[i]) return;
+    vis[i]= true;
+    for(auto j : adj[i])
+        dfs(j);
+    node_order.push_back(i);
+}
+void dfs_print(int i){
+    if(vis[i]) return;
+    imp.pb(mpis[i]);
+    vis[i] = true;
+    for(auto j : transpose_graph[i])
+        dfs_print(j);
+}
+int kosarajuSCC(int n){
+    int scc_count= 0; 
+    for(int i=1; i<=n; i++)
+        if(!vis[i])
+            dfs(i);
+    for(int i=1;i<=n;i++)
+        vis[i]=0;
+    int m = sz(node_order);
+    for(int i=m-1; i>= 0; i--){
+        if(!vis[node_order[i]]){
+            dfs_print(node_order[i]);
+            scc_count++;
+            for(int k = 0;k < sz(imp)-1; k++){
+                cout<<imp[k]<<", ";
+            }
+            cout<<imp[sz(imp)-1]<<endl;
+            imp.clear();
+        }
+    }
+    node_order.clear();
+    return scc_count;
+}
+signed main(){
+    int n,m,q=1;
+    cin>>n>>m;
+    while(n || m){
+        adj = vvi(n+1);
+        transpose_graph = vvi(n+1);
+        vis = vector<bool>(n+1, 0);
+        int qq = 1;
+        for(int i = 0; i<m; i++){
+            string a,b;
+            cin>>a>>b;
+            if(!mpsi[a]){
+                mpis[qq] = a;
+                mpsi[a] = qq++;
+            }
+            if(!mpsi[b]){
+                mpis[qq] = b;
+                mpsi[b] = qq++;
+            }
+            adj[mpsi[a]].push_back(mpsi[b]);
+            transpose_graph[mpsi[b]].push_back(mpsi[a]);
+        }
+        cout<<"Calling circles for data set "<<q++<<":"<<endl;
+        int components = kosarajuSCC(n);
+        cin>>n>>m;
+        mpsi.clear();
+        mpis.clear();
+        if(n||m)cout<<endl;
+    }
+}

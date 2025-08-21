@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+vector<vector<int>> adj;
+bool ok=0;
+void dfs(int u,int v){
+    if(u == v){
+        ok = 1;
+        return;
+    }
+    for(auto& i : adj[u]){
+        dfs(i, v);
+    }
+}
+signed main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int n,m;
+    cin >> n >> m;
+    cin.ignore();
+    int q = 1;
+    map<string,int> mp;
+    vector<pair<string,string>> res;
+    while(n--){
+        string a, b, c, d, e;
+        cin >> a >> b >> c >> d >> e;
+        if(!mp[a])mp[a]=q++;
+        if(!mp[e])mp[e]=q++;
+        res.emplace_back(a, e);
+    }
+    adj = vector<vector<int>>(q);
+    for(auto& i : res){
+        adj[mp[i.first]].push_back(mp[i.second]);
+    }
+    while(m--){
+        string a, b, c, d, e;
+        cin >> a >> b >> c >> d >> e;
+        if(mp.find(a) == mp.end() || mp.find(e) == mp.end()){
+            cout<<"Pants on Fire\n";
+            continue;
+        }
+        int u = mp[a];
+        int v = mp[e];
+        
+        ok = 0;
+        dfs(u, v);
+        if(ok){
+            cout<<"Fact\n";
+            continue;
+        }
+        dfs(v, u);
+        if(ok){
+            cout<<"Alternative Fact\n";
+            continue;
+        }
+        cout<<"Pants on Fire\n";
+    }
+}

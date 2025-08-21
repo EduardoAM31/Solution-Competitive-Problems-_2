@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+signed main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int n,m,k;
+    cin>>n>>m>>k;
+    vector<pair<string,int>> v(n);
+    for(auto&i : v)
+        cin>>i.first>>i.second;
+    sort(v.begin(),v.end(), [&](pair<string,int> a,pair<string,int> b){
+        if(a.second != b.second)
+            return a.second > b.second;
+    });
+    vector<string> res;
+    int sum=0;
+    for(int i=0;i<n;i++){
+        if(sum < m && res.size() < k){
+            res.push_back(v[i].first);
+            sum += v[i].second;
+        }
+    }
+    if(sum < m)cout<<"impossible\n";
+    else{
+        cout<<res.size()<<endl;
+        for(auto& i : res)
+            cout<<i<<", YOU ARE FIRED!\n";
+    }
+}

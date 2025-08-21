@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+ 
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define sz(x) (int)(x.size())
+ 
+const int mod = (int)1e9+7;
+#define inf LLONG_MAX
+ 
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+signed main(){
+	ios;
+	int n;
+	cin>>n;
+	int sum = (1+n)*n/2;
+	if(sum&1){
+		cout<<0<<endl;
+		return 0;
+	}
+	sum/=2;
+	vvi dp(n+2,vi(sum+1,0));
+	dp[0][0]=1;
+	for(int i=1;i<n;i++){
+		for(int j=0;j<=sum;j++){
+			if(j>=i){
+				dp[i][j] += dp[i-1][j-i];
+				dp[i][j]%=mod;
+			}
+			dp[i][j] += dp[i-1][j];
+			dp[i][j]%=mod;
+		}
+	}
+	//~ for(auto i : dp){
+		//~ for(auto j : i){
+			//~ cout<<j<<" ";
+		//~ }
+		//~ cout<<endl;
+	//~ }
+	cout<<dp[n - 1][sum]<<endl;
+}

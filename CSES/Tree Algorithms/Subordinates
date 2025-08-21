@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+int vet[200010]={0};
+vector<vector<int>> adj(200010);
+vector<bool> vis(200010,0);
+int cont=0;
+int dfs(int pos){
+    vis[pos]=1;
+    if(adj[pos].size()==0){
+        vet[pos]=0;
+    }else{
+        for(auto it:adj[pos]){
+            if(!vis[it])vet[pos]+=dfs(it)+1;
+        }
+    }
+    return vet[pos];
+}
+int main()
+{
+    int n;
+    cin>>n;
+    for(int i=1;i<n;i++){
+        int a;
+        cin>>a;
+        adj[a-1].push_back(i);
+    }
+    vet[0]=dfs(0);
+    
+    cout<<vet[0];
+    for(int i=1;i<n;i++)cout<<" "<<vet[i];
+    cout<<endl;
+}

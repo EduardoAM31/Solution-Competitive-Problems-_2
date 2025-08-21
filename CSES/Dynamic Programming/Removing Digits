@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+#define inf INT_MAX;
+vector<int> memo(1000010,-1);
+int pd(int val)
+{
+	if(val==0)return 0;
+	if(memo[val]!=-1)return memo[val];
+	int aux=val;
+	int ans=inf;
+	while(aux){
+		int q=aux%10;
+		if(q)
+			ans=min(ans,pd(val-q)+1);
+		aux/=10;
+	}
+	return memo[val] = ans;
+}
+signed main()
+{
+	int n;
+	cin>>n;
+	cout<<pd(n)<<endl;
+}

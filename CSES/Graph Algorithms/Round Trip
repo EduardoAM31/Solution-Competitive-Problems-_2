@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+#define int long long
+using namespace std;
+const int N = 100010;
+vector<vector<int>> adj(N);
+vector<vector<int>> cycles;
+int cyclenumber = 0;
+int color[N];
+int par[N];
+bool ok=1,ent=1;
+void dfs_cycle(int u, int p)
+{
+	if(!ok) return;
+	if (color[u] == 2)
+		return;
+	if (color[u] == 1){
+		vector<int> v;
+		cyclenumber++;
+		int cur = p;
+		v.push_back(cur);
+		while (cur != u) {
+			cur = par[cur];
+			v.push_back(cur);
+		}
+		ent=0;
+		cycles.push_back(v);
+		ok=0;
+		return;
+	}
+	par[u] = p;
+	color[u] = 1;
+	for (int v : adj[u]) {
+		if (v == par[u]) 
+			continue;
+		dfs_cycle(v, u);
+	}
+	color[u] = 2;
+}
+signed main()
+{
+	int n,m;
+	cin>>n>>m;
+	while(m--){
+		int a,b;cin>>a>>b;
+		adj[a].push_back(b);
+		adj[b].push_back(a);
+	}
+	int cont=0,ult;
+	for(int i=1;i<=n&&ok;i++)
+		dfs_cycle(i, 0);
+	if(ent)cout<<"IMPOSSIBLE\n";
+	else{
+		cout<<cycles[0].size()+1<<endl;
+		for (int x : cycles[0]){
+			if(cont==0){
+				ult = x;
+				cont++;
+			}
+			cout << x << " ";
+		}
+		cout << ult << endl;
+	}
+}

@@ -1,0 +1,123 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+ 
+int mod = (int)1e9+7;
+#define inf LLONG_MAX
+#define endl '\n'
+
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+//broken input = i, ceil = j -> fmod(i, j) == i%j
+//auto func = [&]() -> vi{};
+int fmod(const int i, const int j){
+	return i < j ? i : i % j;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) 
+        os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) 
+        is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) 
+            os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) 
+            is >> j;            
+    return is;
+}
+vector<int> prefix_function(string const& S) {
+  int N = sz(S);
+  vector<int> pi(N, 0);
+  for (int i = 1; i < N; i++) {
+    int j = pi[i-1];
+    while (j > 0 && S[i] != S[j]) j = pi[j-1];
+    if (S[i] == S[j]) j++;
+    pi[i] = j;
+  }
+  return pi;
+}
+vector<int> z_function(string const& S) {
+  int N = sz(S);
+  vector<int> z(N);
+  int l = 0, r = 0;
+  for (int i = 1; i < N; i++) {
+    if (i < r) z[i] = min(r-i, z[i-l]);
+    while (i + z[i] < N && S[z[i]] == S[i+z[i]]) z[i]++;
+    if (i + z[i] > r) l = i, r = i+z[i];
+  }
+  return z;
+}
+vector<int> find_string(string const& S, string const& T) {
+  vector<int> have;
+  int N = sz(S), M = sz(T);
+  auto Z = z_function(T+"#"+S);
+  for (int i = 0; i < N; i++) {
+    if (Z[i+M+1] == M) have.emplace_back(i);
+  }
+  return have;
+}
+signed main(){
+	ios;
+    int qq;
+    cin>>qq;
+    while(qq--){      
+        string a;
+        cin>>a;
+        int n = sz(a);
+        vi v=prefix_function(a);
+        vi v2 = z_function(a);
+        int alvo = 0;
+        for(int i=0;i<n;i++){
+            alvo = max(alvo,v[i]);
+        }
+        string str = "";
+        for(int i=0;v2[i]!=alvo;i++){
+            str += a[i];
+        }
+        int m = sz(str);
+        int pos = n%m;
+        for(int j=8,i=pos;j;i=fmod(i+1,m),j--){
+            cout<<str[i];
+        }
+        cout<<"...\n";
+    }
+}

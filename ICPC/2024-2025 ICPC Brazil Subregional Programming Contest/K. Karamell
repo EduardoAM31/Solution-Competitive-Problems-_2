@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define sz(x) (int)(x.size())
+
+const int mod = (int)1e9+7;
+#define inf LLONG_MAX
+
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+
+signed main()
+{
+    ios;
+    int n,sum,qq=0;
+    cin>>n;
+    multiset<int> sor;
+    vi v(n);
+    for(int i=0;i<n;i++){
+		cin>>v[i];
+		qq+=v[i];
+		sor.insert(v[i]);
+	}
+	sum=qq>>1;
+	vvi dp(n,vi(sum+1,0));
+	for(int i=0;i<n;i++)dp[i][0]=1;
+	for(int i=0;i<n-1;i++){
+		for(int j=0;j<=sum;j++){
+			if(j+v[i]<=sum){
+				dp[i+1][j+v[i]] |= dp[i][j];
+			}
+			dp[i+1][j] |= dp[i][j];
+		}
+	}
+	int i=n-1,j=sum;
+	vi resp;
+	while(i>-1){
+		if(j-v[i]>=0 && dp[i][j-v[i]]){
+			resp.pb(v[i]);
+			sor.erase(sor.find(v[i]));
+			j-=v[i];
+		}		
+		i--;
+	}
+    vi imp;
+	int si=0,sj=0;
+	for(auto ii : resp){
+        si+=ii;
+		imp.pb(ii);
+		while(sj<si){
+			sj+=*(sor.bg);
+			imp.pb(*(sor.bg));
+			sor.erase(sor.find(*(sor.bg)));
+		}
+	}
+    if(si!=sj||qq&1||!dp[n-1][sum]){
+        cout<<-1<<endl;
+    }else{
+        for(auto ii : imp)
+            cout<<ii<<" ";
+    }
+}		
+	
+
+ 

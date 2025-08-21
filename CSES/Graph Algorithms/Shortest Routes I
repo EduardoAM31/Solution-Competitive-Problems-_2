@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+signed main(){
+    int v, e;
+    cin>>v>>e;
+    vector<vector<pair<int,int>>> adj(v);
+    vector<int> dist(v, LLONG_MAX);
+    for(int i=0;i<e;i++){
+        int x,y,p;
+        cin>>x>>y>>p;
+        adj[x-1].push_back({y-1,p});
+    }
+    dist[0]=0;
+    set<pair<int,int>> se;
+    se.insert({0, 0});
+    while(!se.empty()){
+        int u = se.begin()->second;
+        se.erase(se.begin());
+        for(auto i : adj[u]){
+            int v = i.first;
+            int w = i.second;
+            if(dist[u] + w < dist[v]){           
+                se.erase({dist[v], v});
+                dist[v] = dist[u] + w;
+                se.insert({dist[v],v});
+            }
+        }
+    }
+    for(int i=0;i<v;i++)
+        cout<<dist[i]<<" \n"[i==v-1];
+}

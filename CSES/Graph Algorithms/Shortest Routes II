@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+static const double INF = 25*1e13;
+#define int long long
+signed main()
+{    
+     ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+ 
+    int n, m, qq;
+    cin>>n>>m>>qq;
+    vector<vector<double>> adj(n, vector<double>(n, INF));
+    for (int i = 0; i < n; i++)
+        adj[i][i] = 0;
+    while(m--){
+        double x, y, peso;
+        cin >> x >> y >> peso;
+        adj[x-1][y-1] = min(peso,adj[x-1][y-1]);
+        adj[y-1][x-1] = min(peso,adj[y-1][x-1]);
+    }
+    for (int k = 0; k < n; k++)
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+               adj[i][j] = min(adj[i][j], adj[i][k] + adj[k][j]);
+    int s, d;
+    while(qq--){
+        cin>>s>>d;
+        if(adj[s-1][d-1] == 25*1e13)cout<<-1<<endl;
+        else cout<<(int)adj[s-1][d-1]<<endl;
+    }
+}

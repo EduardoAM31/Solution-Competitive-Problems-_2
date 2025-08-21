@@ -1,0 +1,124 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+#define rever(x) string(alld(x))
+ 
+int mod = (int)1e9+7;
+#define inf LLONG_MAX
+#define endl '\n'
+ 
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+#define vvpi vector<vpi>
+int fmod(const int i, const int j){return i < j ? i : i % j;}
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+#define vvc vector<vector<char>> 
+signed main(){
+	ios;
+    int n,m;
+    cin>>n>>m;
+    int ai,aj,bi,bj;
+    vvc adj(n,vector<char>(m));
+    for(int i=0;i<n;i++){
+        for(int j=0;j<m;j++){
+            cin>>adj[i][j];
+            if(adj[i][j]=='A'){
+                ai=i,aj=j;
+            }else if(adj[i][j]=='B'){
+                bi=i,bj=j;
+            }
+        }
+    }
+    vvi caminho(n,vi(m,inf));
+    caminho[ai][aj] = 0;
+    vector<vector<pair<char,pii>>> resp(n, vector<pair<char,pii>>(m,{'x',{0,0}}));
+    queue<pii> q;
+    q.push({ai,aj});
+    int vx[]={1,-1,0,0};
+    int vy[]={0,0,1,-1};
+ 
+    while(!q.empty()){
+        pii p = q.front();
+        q.pop();
+        for(int i=0;i<4;i++){
+            int xi = p.f + vx[i];
+            int yi = p.s + vy[i];
+ 
+            if(xi >= 0 && xi < n && yi >= 0 && yi < m)
+                if(adj[xi][yi] != '#' && caminho[p.f][p.s] + 1 < caminho[xi][yi]){
+                
+                    caminho[xi][yi] = caminho[p.f][p.s] + 1;
+                    q.push({xi,yi});
+ 
+                    if(i==0)resp[xi][yi] = {'D',{p.f,p.s}};
+                    else if(i==1)resp[xi][yi] = {'U',{p.f,p.s}};
+                    else if(i==2)resp[xi][yi] = {'R',{p.f,p.s}};
+                    else if(i==3)resp[xi][yi] = {'L',{p.f,p.s}};
+                }
+        }
+    }
+    if(caminho[bi][bj]==inf){
+        cout<<"NO\n";
+        return 0;
+    }
+    string aux="";
+    int i=bi,j=bj;
+    while(resp[i][j].f!='x'){
+        int auxi,auxj;
+        aux+=resp[i][j].f;
+        auxi=resp[i][j].s.f;
+        auxj=resp[i][j].s.s;
+        i = auxi;
+        j = auxj;
+    }
+    cout<<"YES\n";
+    cout<<sz(aux)<<endl;
+    for(int i=sz(aux)-1;i>=0;i--)cout<<aux[i];
+    cout<<endl;
+}

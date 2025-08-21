@@ -1,0 +1,97 @@
+#if defined(LOCAL) or not defined(LUOGU)
+#pragma GCC optimize(3)
+#pragma GCC optimize("Ofast,unroll-loops")
+#endif
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+//made by dudugyn :DD
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define rbg rbegin()
+#define ren rend()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define alld(x) (x).rbg,(x).ren
+#define lb lower_bound
+#define up upper_bound 
+#define sorc(x) sort(all(x))
+#define sord(x) sort(alld(x))
+#define rever(x) string(alld(x))
+ 
+int mod = (int)1e9+7;
+#define inf LLONG_MAX
+#define endl '\n'
+
+#define V vector
+
+int fmod(const int i, const int j){return i < j ? i : i % j;}
+template<class v>
+auto operator<<(ostream &os, const vector<v> &vec)->ostream& {
+    os << vec[0];
+    for (size_t i = 1; i < vec.size(); i++) os << ' ' << vec[i];    
+    os << '\n';
+    return os;
+}
+template<class v>
+auto operator>>(istream &is, vector<v> &vec)->istream& {
+    for (auto &i : vec) is >> i;    
+    return is;
+}
+template<class v>
+auto operator<<(ostream &os, const vector<vector<v>> &vec)->ostream& {
+    for (auto &i : vec) {
+        os << i[0];
+        for (size_t j = 1; j < i.size(); j++) os << ' ' << i[j];        
+        os << '\n';
+    }
+    return os;
+}
+template<class v>
+auto operator>>(istream  &is, vector<vector<v>> &vec)->istream& {
+    for (auto &i : vec) 
+        for (auto &j : i) is >> j;            
+    return is;
+}
+int n;
+const int maxn = 2 * 1e5 + 5;
+V<V<int>> adj;
+V<int> dist;
+int dfs(int u,int p = -1){
+	dist[u] = 1;
+	for (int i : adj[u]) {
+		if (i == p)continue;
+		dist[u] += dfs(i, u);
+	}
+	return dist[u];
+}
+int centroid(int u, int p = -1) {
+	for (int v : adj[u]) {
+		if (v == p)continue;
+		if (dist[v] * 2 > n)return centroid(v, u);
+	}
+	return u;
+}
+signed main() {
+    ios;
+    cin>>n;
+    dist.resize(n);
+    adj.resize(n);
+    for(int i=0;i<n-1;i++){
+        int u,v;
+        cin>>u>>v;
+        --u,--v;
+        adj[u].pb(v);
+        adj[v].pb(u);
+    }
+    dfs(0);
+    cout<<centroid(0)+1<<endl;
+}
+
+
+ 

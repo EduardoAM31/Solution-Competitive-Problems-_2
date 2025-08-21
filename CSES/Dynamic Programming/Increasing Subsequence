@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+ 
+#define int long long
+#define inf LLONG_MAX
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define sz(x) (int)(x.size())
+#define all(x) (x).bg,(x).en
+#define lb lower_bound
+#define up upper_bound 
+ 
+const int mod = (int)1e9+7;
+ 
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+#define vpi vector<pii>
+ 
+signed main(){
+	ios;
+	int n;
+	cin>>n;
+	vi v(n);
+	for(auto &i : v)
+		cin>>i;
+	vi p(n);
+	p[0]=1;
+	vi val;
+	val.pb(v[0]);
+	for(int i=1;i<n;i++){
+		int pos = lb(all(val),v[i]) - val.bg;
+		if(val[pos]<v[i]){
+			val.pb(v[i]);
+			p[i]++;
+		}else{
+			if(val[pos]>v[i]){
+				val[pos] = v[i];
+			}
+		}
+		p[i] += p[i-1];
+		//~ for(auto i : val)
+			//~ cout<<i<<" ";
+		//~ cout<<endl;
+	}
+	//~ for(auto i : p)
+		//~ cout<<i<<" ";
+	//~ cout<<endl;
+	cout<<p[n-1]<<endl;
+}

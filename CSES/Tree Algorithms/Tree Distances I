@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+using namespace std;
+vector<int> grafo[200100];
+pair<int,int> dist[200100];
+int distanciatot1[200100]={0};
+int distanciatot2[200100]={0};
+void bfs(int a)
+{
+    queue<int> fila;
+    fila.push(a);
+    dist[a].first=0;
+    while(!fila.empty()){
+        int u=fila.front();
+        fila.pop();
+        for(int i=0;i<grafo[u].size();i++){
+            int v=grafo[u][i];
+            if(dist[v].first==-1){
+                dist[v].first=dist[u].first+1;
+                fila.push(v);
+            }
+        }
+    }
+}
+void bfsx_y(int a)
+{
+    queue<int> fila;
+    fila.push(a);
+    dist[a].first=0;
+    while(!fila.empty()){
+        int u=fila.front();
+        fila.pop();
+        for(int i=0;i<grafo[u].size();i++){
+            int v=grafo[u][i];
+            if(dist[v].first==-1){
+                distanciatot1[v]=dist[u].first+1;
+                dist[v].first=dist[u].first+1;
+                fila.push(v);
+            }
+        }
+    }
+}
+void bfsy_x(int a)
+{
+    queue<int> fila;
+    fila.push(a);
+    dist[a].first=0;
+    while(!fila.empty()){
+        int u=fila.front();
+        fila.pop();
+        for(int i=0;i<grafo[u].size();i++){
+            int v=grafo[u][i];
+            if(dist[v].first==-1){
+                distanciatot2[v]=dist[u].first+1;
+                dist[v].first=dist[u].first+1;
+                fila.push(v);
+            }
+        }
+    }
+}
+int main()
+{
+    int n,m,a;
+    cin>>n;
+    for(int i=0;i<n-1;i++){
+        int a,b;
+        cin>>a>>b;
+        grafo[a-1].push_back(b-1);
+        grafo[b-1].push_back(a-1);
+    }
+    for(int i=0;i<n;i++)dist[i].second=i,dist[i].first=-1;
+    bfs(0);
+    sort(dist,dist+n);
+    int x=dist[n-1].second;
+    for(int i=0;i<n;i++)dist[i].second=i,dist[i].first=-1;
+    bfsx_y(x);
+    sort(dist,dist+n);
+    int y=dist[n-1].second;
+    for(int i=0;i<n;i++)dist[i].second=i,dist[i].first=-1;
+    bfsy_x(y);
+    for(int i=0;i<n;i++)
+        if(i<n-1)cout<<max(distanciatot1[i],distanciatot2[i])<<" ";
+        else cout<<max(distanciatot1[i],distanciatot2[i])<<endl;
+}

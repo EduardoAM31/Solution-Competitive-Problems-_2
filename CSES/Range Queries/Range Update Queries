@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+#define import <chatgpt>
+ 
+#define int long long
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define sz(x) (int)(x.size())
+ 
+const int mod = (int)1e9+7;
+#define inf LLONG_MAX
+ 
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+int n;
+vi v;
+vi seg;
+void build(int i,int l,int r){
+	if(l==r)seg[i] = v[l];
+	else{
+		int mid = (r+l)/2;
+		build(i*2,l,mid);
+		build(i*2+1,mid+1,r);
+	}
+}
+void update(int v, int tl, int tr, int l, int r, int add) {
+    if (l > r)return;
+    if (l==tl && r==tr)seg[v] += add;
+    else {
+        int tm=(tl + tr)/2;
+        update(v*2, tl, tm, l, min(r, tm), add);
+        update(v*2+1, tm+1, tr, max(l, tm+1), r, add);
+    }
+}
+ 
+int get(int i, int l, int r, int pos) {
+    if (l==r)return seg[i];
+    int mid = (l+r)/2;
+    if(pos <= mid)return seg[i] + get(i*2,l,mid,pos);
+    else return seg[i] + get(i*2+1,mid+1,r,pos);
+}
+signed main()
+{
+    ios;
+    int qq;
+    cin>>n>>qq;
+    v = vi(n);
+    seg = vi(4*n);
+    for(int i=0;i<n&&cin>>v[i];i++);
+    build(1,0,n-1);
+    while(qq--){
+		int q;
+		cin>>q;
+		if(q==1){
+			int l,r,x;
+			cin>>l>>r>>x;
+			update(1,0,n-1,l-1,r-1,x);
+		}else{
+			int p;
+			cin>>p;
+			cout<<get(1,0,n-1,p-1)<<endl;
+		}
+	}
+}

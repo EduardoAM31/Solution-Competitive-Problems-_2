@@ -1,0 +1,107 @@
+#include <bits/stdc++.h>
+
+#define ios ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+
+using namespace std;
+
+#define int long long
+#define import <chatgpt>
+#define vi vector<int>
+#define vvi vector<vi>
+#define vvvi vector<vvi>
+#define pii pair<int,int>
+
+const int mod = (int)1e9+7;
+
+#define inf ULLONG_MAX
+
+#define f first
+#define s second
+#define pb push_back
+#define bg begin()
+#define en end()
+#define sz(x) (int)(x.size())
+
+
+
+const int MAXN = (int) 1e6 + 5;
+
+vi prato(1e6+24,0);
+vector<int>pot((int)2e6, 1);
+vector<int>pri(MAXN + 10, 0);
+ 
+ 
+void sieve(){  
+  iota(pri.begin(), pri.end(), 0);
+  for(int i = 2; i <= MAXN; i++){
+    if(pri[i] == i) {
+      for(int j = i * i; j <= MAXN; j+=i){
+        pri[j] = i;
+      }
+    }
+  }
+}
+ 
+vector<int> fact(int x){
+  vector<int> vec;
+  while(pri[x] != x) {
+    vec.push_back(pri[x]);
+    x /= pri[x];
+  }
+  if(x != 1) {
+    vec.push_back(pri[x]);
+  }
+  sort(vec.begin(), vec.end());
+  vec.erase(unique(vec.begin(), vec.end()), vec.end());
+  return vec;
+}
+
+signed main()
+{
+    ios;
+	int n;
+	cin>>n;
+	sieve();
+	vi resp(n+1);
+	resp[n]=1;
+	for(int i=n-1;i>=0;i--){
+		resp[i] = (resp[i+1] * 2) % mod;
+	}
+	for(int i=0;i<n;i++){
+		int p; cin>>p;
+		vi ppra = fact(p);
+		
+		for(int j=1;j<(1ll<<ppra.size());j++){
+			int x=1;
+			for(int k=0;k<(int)ppra.size();k++){
+				if(j & (1ll<<k)){
+					x *= ppra[k]; 
+				}
+			}
+			prato[x]++;
+		}
+	}
+	int m;
+	cin>>m;
+	for(int i=0;i<m;i++){
+		int p;cin>>p;
+		vi ppra = fact(p);
+		
+		int sum=0;
+		for(int j=1;j<(1ll<<ppra.size());j++){
+			int x=1;
+			for(int k=0;k<(int)ppra.size();k++){
+				if(j & (1ll<<k)){
+					x *= ppra[k];
+				}
+			}
+			if(__builtin_popcount(j)&1){
+				sum+=prato[x];
+			}else{
+				sum-=prato[x];
+			}
+		}
+		cout<<resp[sum]<<endl;
+	}
+}
+ 

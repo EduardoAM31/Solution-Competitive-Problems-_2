@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define int long long
+int n;
+const int mod=1e9+7;
+vector<int> coin;
+vector<int> moeda;
+int pd(int valor)
+{
+	int &p=moeda[valor];
+	if(p!=-1)return p;
+	if(valor==0)return 1;
+	int ans=0;
+	for(int i=0;i<n;i++){
+		if(valor-coin[i]>=0){
+			ans+=pd(valor-coin[i])%mod;
+			ans%=mod;
+		}
+	}
+	return p= ans%mod;
+}
+signed main()
+{
+	int valor;
+	cin>>n>>valor;
+	moeda = vector<int>(valor+1,-1);
+	coin = vector<int>(n);
+	for(int i=0;i<n;i++)cin>>coin[i];
+	cout<<pd(valor)<<endl;
+}
